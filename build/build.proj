@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="TryPublishSigned" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
+  </PropertyGroup>
+
+  <Target Name="TryPublishSigned" DependsOnTargets="CheckForNewVersions">
+    <Message Text="$(NewVersionsExist)" />
+    <CallTarget Targets="PublishSigned" Condition=" '$(NewVersionsExist)' == 'true' " />
+  </Target>
+
+  <Target Name="PublishSigned" DependsOnTargets="RetrieveLatestVersions">
+    <!-- Sign assemblies -->
+    <Exec Command="packages\Brutal.Dev.StrongNameSigner\tools\StrongNameSigner.Console.exe -k flurl.snk -in &quot;packages\flurl|packages\flurl.http&quot;" WorkingDirectory=".." />
+
+    <!-- Repackage -->
+    <MakeDir Directories="..\artifacts" />
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl\Flurl.nuspec"
+             Query="//nuget:id | //nuget:title"
+             Value="Flurl.Signed">
+    </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl\Flurl.nuspec"
+             Query="//nuget:projectUrl"
+             Value="https://github.com/carolynvs/Flurl.Signed">
+    </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl\Flurl.nuspec"
+             Query="//nuget:description"
+             Value="This is the Flurl package, repackaged with strongly named assemblies. See http://tmenier.github.io/Flurl for the official project.">
+    </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
+             Query="//nuget:id | //nuget:title"
+             Value="Flurl.Http.Signed">
+    </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
+             Query="//nuget:projectUrl"
+             Value="https://github.com/carolynvs/Flurl.Signed">
+    </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
+             Query="//nuget:description"
+             Value="This is the Flurl.Http package, repackaged with strongly named assemblies. See http://tmenier.github.io/Flurl for the official project.">
+    </XmlPoke>
+
+    <Exec Command="$(NuGet) pack packages\Flurl\Flurl.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
+    <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
+
+    <!-- Publish -->
+    <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the flurl.signed plan in Bamboo -->
+    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts" ContinueOnError="ErrorAndContinue"/>
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts" />
+  </Target>
+
+  <Target Name="CheckForNewVersions" DependsOnTargets="RetrieveLatestVersions">
+    <PropertyGroup>
+      <FlurlSignedListing>Flurl.Signed $(FLurlVersion)</FlurlSignedListing>
+      <FlurlHttpSignedListing>Flurl.Signed $(FLurlVersion)</FlurlHttpSignedListing>
+      <NewVersionsExist Condition="!$(ListedVersions.Contains(FlurlSignedListing)) OR !$(ListedVersions.Contains(FlurlHttpSignedListing))">true</NewVersionsExist>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="RetrieveLatestVersions" DependsOnTargets="DownloadNuGet">
+    <RemoveDir Directories="packages" />
+    <Exec Command="$(NuGet) install Brutal.Dev.StrongNameSigner -ExcludeVersion -OutputDirectory packages" WorkingDirectory=".." />
+    <Exec Command="$(NuGet) install Flurl.Http -ExcludeVersion -OutputDirectory packages -PackageSaveMode nuspec" WorkingDirectory=".." />
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl\Flurl.nuspec"
+             Query="//nuget:version/text()">
+      <Output TaskParameter="Result" PropertyName="FlurlVersion" />
+    </XmlPeek>
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
+             Query="//nuget:version/text()">
+      <Output TaskParameter="Result" PropertyName="FlurlHttpVersion" />
+    </XmlPeek>
+    <Exec Command="$(NuGet) list Flurl -AllVersions" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ListedVersions" />
+    </Exec>
+  </Target>
+
+  <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
+    <MakeDir Directories="$(LocalAppData)\NuGet" />
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '$(NuGet)'&quot;" />
+  </Target>
+
+</Project>
