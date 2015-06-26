@@ -46,6 +46,11 @@
              Query="//nuget:description"
              Value="This is the Flurl.Http package, repackaged with strongly named assemblies. See http://tmenier.github.io/Flurl for the official project.">
     </XmlPoke>
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+             XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
+             Query="//nuget:dependency[@id='Flurl']/@version/../@id"
+             Value="Flurl.Signed">
+    </XmlPoke>
 
     <Exec Command="$(NuGet) pack packages\Flurl\Flurl.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
     <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
@@ -65,7 +70,7 @@
   </Target>
 
   <Target Name="RetrieveLatestVersions" DependsOnTargets="DownloadNuGet">
-    <RemoveDir Directories="packages" />
+    <RemoveDir Directories="..\packages" />
     <Exec Command="$(NuGet) install Brutal.Dev.StrongNameSigner -ExcludeVersion -OutputDirectory packages" WorkingDirectory=".." />
     <Exec Command="$(NuGet) install Flurl.Http -ExcludeVersion -OutputDirectory packages -PackageSaveMode nuspec" WorkingDirectory=".." />
     <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
