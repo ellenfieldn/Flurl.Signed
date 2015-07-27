@@ -13,6 +13,7 @@
   <Target Name="PublishSigned" DependsOnTargets="RetrieveLatestVersions">
     <!-- Sign assemblies -->
     <Exec Command="packages\Brutal.Dev.StrongNameSigner\tools\StrongNameSigner.Console.exe -k flurl.snk -in &quot;packages\flurl|packages\flurl.http&quot;" WorkingDirectory=".." />
+    <Exec Command="cmd /c DEL /S *.unsigned" WorkingDirectory="..\packages" />
 
     <!-- Repackage -->
     <MakeDir Directories="..\artifacts" />
