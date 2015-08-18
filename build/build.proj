@@ -7,7 +7,7 @@
 
   <Target Name="TryPublishSigned" DependsOnTargets="CheckForNewVersions">
     <Message Text="$(NewVersionsExist)" />
-    <CallTarget Targets="PublishSigned" Condition=" '$(NewVersionsExist)' == 'true' " />
+    <CallTarget Targets="PublishSigned" Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' OR  '$(ShouldPublishFlurlHttpToNuGet)' == 'True' " />
   </Target>
 
   <Target Name="PublishSigned" DependsOnTargets="RetrieveLatestVersions">
@@ -58,16 +58,19 @@
 
     <!-- Publish -->
     <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the flurl.signed plan in Bamboo -->
-    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts" ContinueOnError="ErrorAndContinue"/>
-    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts" />
+    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts"
+          Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' "/>
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="..\artifacts"
+          Condition=" '$(ShouldPublishFlurlHttpToNuGet)' == 'True' "/>
   </Target>
 
   <Target Name="CheckForNewVersions" DependsOnTargets="RetrieveLatestVersions">
-    <PropertyGroup>
-      <FlurlSignedListing>Flurl.Signed $(FLurlVersion)</FlurlSignedListing>
-      <FlurlHttpSignedListing>Flurl.Signed $(FLurlVersion)</FlurlHttpSignedListing>
-      <NewVersionsExist Condition="!$(ListedVersions.Contains(FlurlSignedListing)) OR !$(ListedVersions.Contains(FlurlHttpSignedListing))">true</NewVersionsExist>
-    </PropertyGroup>
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(Version)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlToNuGet" />
+    </Exec>
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(Version)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlHttpToNuGet" />
+    </Exec>
   </Target>
 
   <Target Name="RetrieveLatestVersions" DependsOnTargets="DownloadNuGet">
@@ -84,9 +87,6 @@
              Query="//nuget:version/text()">
       <Output TaskParameter="Result" PropertyName="FlurlHttpVersion" />
     </XmlPeek>
-    <Exec Command="$(NuGet) list Flurl -AllVersions" ConsoleToMSBuild="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="ListedVersions" />
-    </Exec>
   </Target>
 
   <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
