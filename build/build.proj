@@ -77,12 +77,12 @@
     <RemoveDir Directories="..\packages" />
     <Exec Command="$(NuGet) install Brutal.Dev.StrongNameSigner -ExcludeVersion -OutputDirectory packages" WorkingDirectory=".." />
     <Exec Command="$(NuGet) install Flurl.Http -ExcludeVersion -OutputDirectory packages -PackageSaveMode nuspec" WorkingDirectory=".." />
-    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:version/text()">
       <Output TaskParameter="Result" PropertyName="FlurlVersion" />
     </XmlPeek>
-    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd'/&gt;"
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:version/text()">
       <Output TaskParameter="Result" PropertyName="FlurlHttpVersion" />
