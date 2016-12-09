@@ -17,37 +17,37 @@
 
     <!-- Repackage -->
     <MakeDir Directories="..\artifacts" />
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:id | //nuget:title"
              Value="Flurl.Signed">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:projectUrl"
              Value="https://github.com/carolynvs/Flurl.Signed">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:description"
              Value="This is the Flurl package, repackaged with strongly named assemblies. See http://tmenier.github.io/Flurl for the official project.">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:id | //nuget:title"
              Value="Flurl.Http.Signed">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:projectUrl"
              Value="https://github.com/carolynvs/Flurl.Signed">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:description"
              Value="This is the Flurl.Http package, repackaged with strongly named assemblies. See http://tmenier.github.io/Flurl for the official project.">
     </XmlPoke>
-    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:dependency[@id='Flurl']/@version/../@id"
              Value="Flurl.Signed">
@@ -77,12 +77,12 @@
     <RemoveDir Directories="..\packages" />
     <Exec Command="$(NuGet) install Brutal.Dev.StrongNameSigner -ExcludeVersion -OutputDirectory packages" WorkingDirectory=".." />
     <Exec Command="$(NuGet) install Flurl.Http -ExcludeVersion -OutputDirectory packages -PackageSaveMode nuspec" WorkingDirectory=".." />
-    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:version/text()">
       <Output TaskParameter="Result" PropertyName="FlurlVersion" />
     </XmlPeek>
-    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd'/&gt;"
+    <XmlPeek Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:version/text()">
       <Output TaskParameter="Result" PropertyName="FlurlHttpVersion" />
