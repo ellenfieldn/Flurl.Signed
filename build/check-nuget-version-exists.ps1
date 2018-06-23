@@ -28,5 +28,5 @@ try
 catch 
 {
   Write-Error = $_.Exception.Response.StatusCode.Value__
-  Write-Host "False"
+  Write-Host "True"
 }
