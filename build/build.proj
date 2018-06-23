@@ -91,7 +91,7 @@
 
   <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
     <MakeDir Directories="$(LocalAppData)\NuGet" />
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://dist.nuget.org/win-x86-commandline/v3.4.4/NuGet.exe' -OutFile '$(NuGet)'&quot;" />
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://dist.nuget.org/win-x86-commandline/v4.6.2/nuget.exe' -OutFile '$(NuGet)'&quot;" />
   </Target>
 
 </Project>
