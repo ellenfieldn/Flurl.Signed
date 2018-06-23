@@ -27,6 +27,6 @@ try
 } 
 catch 
 {
-  Write-Error = $_.Exception
+  #Write-Error = $_.Exception
   Write-Host "True"
 }
