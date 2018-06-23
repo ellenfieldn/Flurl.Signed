@@ -57,9 +57,9 @@
     <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
 
     <!-- Publish -->
-    <Exec Command="$(NuGet) push Flurl.Signed.New.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Signed.New.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://int.nugettest.org" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' "/>
-    <Exec Command="$(NuGet) push Flurl.Http.Signed.New.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.New.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://int.nugettest.org" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlHttpToNuGet)' == 'True' "/>
   </Target>
 
