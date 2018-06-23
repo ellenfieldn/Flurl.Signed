@@ -20,12 +20,12 @@
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:id | //nuget:title"
-             Value="Flurl.Signed">
+             Value="Flurl.Signed.New">
     </XmlPoke>
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
              Query="//nuget:projectUrl"
-             Value="https://github.com/carolynvs/Flurl.Signed">
+             Value="https://github.com/ellenfieldn/Flurl.Signed">
     </XmlPoke>
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl\Flurl.nuspec"
@@ -35,12 +35,12 @@
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:id | //nuget:title"
-             Value="Flurl.Http.Signed">
+             Value="Flurl.Http.Signed.New">
     </XmlPoke>
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:projectUrl"
-             Value="https://github.com/carolynvs/Flurl.Signed">
+             Value="https://github.com/ellenfieldn/Flurl.Signed">
     </XmlPoke>
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
@@ -50,25 +50,24 @@
     <XmlPoke Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd'/&gt;"
              XmlInputPath="..\packages\Flurl.Http\Flurl.Http.nuspec"
              Query="//nuget:dependency[@id='Flurl']/@version/../@id"
-             Value="Flurl.Signed">
+             Value="Flurl.Signed.New">
     </XmlPoke>
 
     <Exec Command="$(NuGet) pack packages\Flurl\Flurl.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
     <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
 
     <!-- Publish -->
-    <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the flurl.signed plan in Bamboo -->
-    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Signed.New.(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' "/>
-    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.New.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://staging.nuget.org" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlHttpToNuGet)' == 'True' "/>
   </Target>
 
   <Target Name="CheckForNewVersions" DependsOnTargets="RetrieveLatestVersions">
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(FlurlVersion)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed.New $(FlurlVersion)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlToNuGet" />
     </Exec>
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(FlurlHttpVersion)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed.New $(FlurlHttpVersion)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlHttpToNuGet" />
     </Exec>
   </Target>
