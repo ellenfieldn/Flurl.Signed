@@ -4,12 +4,12 @@ setlocal
 :: Load the environment of the most recent version of Visual Studio installed
 if not defined VisualStudioVersion (
     if defined VS140COMNTOOLS (
-        call "%VS140COMNTOOLS%\VsDevCmd.bat"
+        call "%VS140COMNTOOLS%VsDevCmd.bat"
         goto :build
     )
 
     if defined VS120COMNTOOLS (
-        call "%VS120COMNTOOLS%\VsDevCmd.bat"
+        call "%VS120COMNTOOLS%VsDevCmd.bat"
         goto :build
     )
 
