@@ -10,4 +10,3 @@ Enjoy!
 
 ## Caveats
 * These are not built from source, they simply sign the existing assemblies on NuGet and publish them back to NuGet.
-* Yes, the private key is checked-in :smiling_imp:
