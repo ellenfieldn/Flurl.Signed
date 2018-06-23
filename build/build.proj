@@ -58,9 +58,9 @@
 
     <!-- Publish -->
     <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the flurl.signed plan in Bamboo -->
-    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg $(NugetApiKey) -Source https://ellenfieldn.pkgs.visualstudio.com/_packaging/CI-Feed/nuget/v3/index.json" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://ellenfieldn.pkgs.visualstudio.com/_packaging/CI-Feed/nuget/v3/index.json" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' "/>
-    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg $(NugetApiKey) -Source https://ellenfieldn.pkgs.visualstudio.com/_packaging/CI-Feed/nuget/v3/index.json" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://ellenfieldn.pkgs.visualstudio.com/_packaging/CI-Feed/nuget/v3/index.json" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlHttpToNuGet)' == 'True' "/>
   </Target>
 
