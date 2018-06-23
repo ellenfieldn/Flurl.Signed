@@ -23,7 +23,7 @@ try
   
   $hasVersion = $packageJson.versions.Contains($version)
   Write-Verbose "HasVersion: $hasVersion"
-  Write-Host $hasVersion
+  Write-Host (!$hasVersion)
 } 
 catch 
 {
