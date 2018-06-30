@@ -15,6 +15,13 @@ Enjoy!
 * Todd Menier for developing Flurl. (https://github.com/tmenier)
 * Carolyn Van Slyck for developing the original version of Flurl.Signed. (https://github.com/carolynvs)
 
+## Roadmap
+I don't think I plan to do too much to this given that it already works, but some things that would be fun and make it more robust that I may be able to find time for:
+* Separate the nuget package generation from the uploading to the nuget repository.
+* Add verification of the nuget packages with sn.exe
+* Add integration tests to verify consumption of the nuget packages
+* Push based on results of verification and integration tests
+
 ## How it works
 For anyone who wants to replicate this, here's how:
 
