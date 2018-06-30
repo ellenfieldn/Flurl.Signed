@@ -14,3 +14,19 @@ Enjoy!
 ## Acknowledgements
 * Todd Menier for developing Flurl. (https://github.com/tmenier)
 * Carolyn Van Slyck for developing the original version of Flurl.Signed. (https://github.com/carolynvs)
+
+## How it works
+For anyone who wants to replicate this, here's how the build orchestration currently work:
+* Build Definition in VSTS
+* Get Sources from GitHub
+* Phase 1 - Defaults
+  * Download Secure file - Downloads the signing key which was uploaded to VSTS
+  * MSBuild
+    * Project: build/build.proj
+    * MSBuild Version: Latest
+    * MSBuild Architecture: x86
+    * MSBuild Arguments: `/p:NugetApiKey=$(NugetApiKey)`
+* Variables: Need to define NugetApiKey as your Nuget Api Key.
+* Triggers: 
+  * When: Scheduled every day at 2am utc
+  * Uncheck Only schedule builds if source or definition has changed
