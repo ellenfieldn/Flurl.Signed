@@ -16,7 +16,13 @@ Enjoy!
 * Carolyn Van Slyck for developing the original version of Flurl.Signed. (https://github.com/carolynvs)
 
 ## How it works
-For anyone who wants to replicate this, here's how the build orchestration currently work:
+For anyone who wants to replicate this, here's how:
+
+### Generating a signing key
+1. Open Visual Studio command prompt as Administrator
+1. Run sn -k Your.Key.Name.snk
+
+### Build Orchestration
 * Build Definition in VSTS
 * Get Sources from GitHub
 * Phase 1 - Defaults
