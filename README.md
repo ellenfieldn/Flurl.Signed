@@ -10,3 +10,7 @@ Enjoy!
 
 ## Caveats
 * These are not built from source, they simply sign the existing assemblies on NuGet and publish them back to NuGet.
+
+## Acknowledgements
+* Todd Menier for developing Flurl. (https://github.com/tmenier)
+* Carolyn Van Slyck for developing the original version of Flurl.Signed. (https://github.com/carolynvs)
