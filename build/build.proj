@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="TryPublishSigned" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <NuGet>$(LocalAppData)\NuGet\NuGet3.exe</NuGet>
+    <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
   </PropertyGroup>
 
   <Target Name="TryPublishSigned" DependsOnTargets="CheckForNewVersions">
@@ -53,6 +53,8 @@
              Value="Flurl.Signed">
     </XmlPoke>
 
+    <Exec Command="cmd /c DEL /S .signature.p7s" WorkingDirectory="..\packages" />
+    
     <Exec Command="$(NuGet) pack packages\Flurl\Flurl.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
     <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
 
