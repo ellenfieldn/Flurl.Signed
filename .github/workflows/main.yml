@@ -3,8 +3,8 @@ name: ScheduledUpdate
 # Controls when the workflow will run
 on:
   # Triggers the workflow to run at 6am UTC
-  on:
-    - cron: '6 0 * * *'
+  schedule:
+    - cron: '0 6 * * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
