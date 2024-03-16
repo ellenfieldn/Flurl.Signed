@@ -66,10 +66,10 @@
   </Target>
 
   <Target Name="CheckForNewVersions" DependsOnTargets="RetrieveLatestVersions">
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(FlurlVersion) $(NugetSource)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(FlurlVersion) $(NugetDestination)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlToNuGet" />
     </Exec>
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(FlurlHttpVersion) $(NugetSource)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(FlurlHttpVersion) $(NugetDestination)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlHttpToNuGet" />
     </Exec>
   </Target>
