@@ -14,10 +14,10 @@ jobs:
       env: "int"
 
 
-#  release:
-#    name: Push to nuget.org prod
-#    secrets: inherit
-#    uses: ./.github/workflows/push-package.yml
-#    needs: test-in-int
-#    with:
-#      env: "prod"
+  release:
+    name: Push to nuget.org prod
+    secrets: inherit
+    uses: ./.github/workflows/push-package.yml
+    needs: test-in-int
+    with:
+      env: "prod"
