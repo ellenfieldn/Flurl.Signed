@@ -12,7 +12,7 @@
 
   <Target Name="PublishSigned" DependsOnTargets="RetrieveLatestVersions">
     <!-- Sign assemblies -->
-    <Exec Command="packages\Brutal.Dev.StrongNameSigner\tools\StrongNameSigner.Console.exe -k $(DOWNLOADSECUREFILE_SECUREFILEPATH) -in &quot;packages\flurl|packages\flurl.http&quot;" WorkingDirectory=".." />
+    <Exec Command="packages\Brutal.Dev.StrongNameSigner\tools\StrongNameSigner.Console.exe -k $(NugetSigningKey) -in &quot;packages\flurl|packages\flurl.http&quot;" WorkingDirectory=".." />
     <Exec Command="cmd /c DEL /S *.unsigned" WorkingDirectory="..\packages" />
 
     <!-- Repackage -->
@@ -59,17 +59,17 @@
     <Exec Command="$(NuGet) pack packages\Flurl.Http\Flurl.Http.nuspec -OutputDirectory artifacts" WorkingDirectory=".." />
 
     <!-- Publish -->
-    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source https://api.nuget.org/v3/index.json" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Signed.$(FlurlVersion).nupkg -ApiKey $(NugetApiKey) -Source $(NugetDestination)" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlToNuGet)' == 'True' "/>
-    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source https://api.nuget.org/v3/index.json" WorkingDirectory="..\artifacts"
+    <Exec Command="$(NuGet) push Flurl.Http.Signed.$(FlurlHttpVersion).nupkg -ApiKey $(NugetApiKey) -Source $(NugetDestination)" WorkingDirectory="..\artifacts"
           Condition=" '$(ShouldPublishFlurlHttpToNuGet)' == 'True' "/>
   </Target>
 
   <Target Name="CheckForNewVersions" DependsOnTargets="RetrieveLatestVersions">
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(FlurlVersion)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Signed $(FlurlVersion) $(NugetSource)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlToNuGet" />
     </Exec>
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(FlurlHttpVersion)" ConsoleToMSBuild="true">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 Flurl.Http.Signed $(FlurlHttpVersion) $(NugetSource)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishFlurlHttpToNuGet" />
     </Exec>
   </Target>

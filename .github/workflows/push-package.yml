@@ -1,0 +1,26 @@
+name: "Build and Push Package to Nuget"
+on:
+  workflow_call:
+    inputs:
+      env: 
+        description: 'Environment to build and push package to'
+        type: string
+        required: true
+        
+jobs:
+  build_and_push:
+    name: Build and Push
+    runs-on: windows-latest
+    environment: 
+      name: ${{ inputs.env }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Decode Signing Key
+        run: |
+          echo ${{ secrets.NUGET_SIGNING_KEY }} > Flurl.Signed.Encoded.txt 
+          certutil -decode -f Flurl.Signed.encoded.txt Flurl.Signed.Snk
+    
+      - name: Run MSBuild
+        run: msbuild src/build.proj /p:NugetApiKey=${{ secrets.NUGET_API_KEY }} /p:NugetSigningKey=Flurl.Signed.Snk /p:NugetSource=${{ vars.NUGET_SOURCE }} /p:NugetDestination=${{ vars.NUGET_DESTINATION }}

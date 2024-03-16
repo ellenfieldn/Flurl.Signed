@@ -26,8 +26,10 @@ I don't think I plan to do too much to this given that it already works, but som
 For anyone who wants to replicate this, here's how:
 
 ### Generating a signing key
-1. Open Visual Studio command prompt as Administrator
-1. Run sn -k Your.Key.Name.snk
+1. Open Visual Studio Powershell as Administrator
+1. Run `sn -k Flurl.Signed.snk`
+1. Encode as base64 by running the command `certutil -encodehex -f .\Flurl.Signed.snk Flurl.Signed.encoded.txt 0x40000001`
+1. Add as Secret "NUGET_SIGNING_KEY" to github repo
 
 ### Build Orchestration
 * Build Definition in VSTS
