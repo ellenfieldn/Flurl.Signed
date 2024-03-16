@@ -1,0 +1,23 @@
+name: Update Signed Flurl Packages
+
+on:
+  #schedule:
+  #  - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  test-in-int:
+    name: Push to nuget.org int
+    secrets: inherit
+    uses: ./.github/workflows/push-package.yml
+    with:
+      env: "int"
+
+
+#  release:
+#    name: Push to nuget.org prod
+#    secrets: inherit
+#    uses: ./.github/workflows/push-package.yml
+#    needs: test-in-int
+#    with:
+#      env: "prod"
