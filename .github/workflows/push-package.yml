@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Decode Signing Key
         run: |
           echo ${{ secrets.NUGET_SIGNING_KEY }} > Flurl.Signed.Encoded.txt 
