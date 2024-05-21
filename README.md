@@ -37,19 +37,3 @@ For anyone who wants to replicate this, here's how:
 1. Run `sn -k Flurl.Signed.snk`
 1. Encode as base64 by running the command `certutil -encodehex -f .\Flurl.Signed.snk Flurl.Signed.encoded.txt 0x40000001`
 1. Add as Secret "NUGET_SIGNING_KEY" to github repo
-
-### Build Orchestration
-
-- Build Definition in VSTS
-- Get Sources from GitHub
-- Phase 1 - Defaults
-  - Download Secure file - Downloads the signing key which was uploaded to VSTS
-  - MSBuild
-    - Project: build/build.proj
-    - MSBuild Version: Latest
-    - MSBuild Architecture: x86
-    - MSBuild Arguments: `/p:NugetApiKey=$(NugetApiKey)`
-- Variables: Need to define NugetApiKey as your Nuget Api Key.
-- Triggers:
-  - When: Scheduled every day at 2am utc
-  - Uncheck Only schedule builds if source or definition has changed
